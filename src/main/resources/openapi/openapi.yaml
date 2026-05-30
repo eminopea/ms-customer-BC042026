@@ -1,0 +1,342 @@
+
+  openapi: 3.0.3
+
+  info:
+    title: ms-customer API
+    version: 1.0.0
+    description: Microservicio de clientes bancarios
+
+  tags:
+    - name: Customers
+
+  paths:
+
+    /customers:
+      post:
+        tags:
+          - Customers
+        summary: Registrar cliente
+        operationId: createCustomer
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseCustomerRequest'
+        responses:
+          '201':
+            description: Cliente registrado exitosamente
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ResponseCustomerApi'
+
+      get:
+        tags:
+          - Customers
+        summary: Buscar clientes
+        operationId: searchCustomers
+        parameters:
+          - name: status
+            in: query
+            schema:
+              $ref: '#/components/schemas/CustomerStatus'
+
+          - name: profile
+            in: query
+            schema:
+              $ref: '#/components/schemas/CustomerProfile'
+
+          - name: documentNumber
+            in: query
+            schema:
+              type: string
+
+          - name: page
+            in: query
+            schema:
+              type: integer
+              default: 0
+
+          - name: size
+            in: query
+            schema:
+              type: integer
+              default: 10
+
+        responses:
+          '200':
+            description: Lista paginada
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/PagedCustomerResponse'
+
+    /customers/{customerId}:
+      put:
+        tags:
+          - Customers
+        summary: Actualizar cliente
+        operationId: updateCustomer
+        parameters:
+          - name: customerId
+            in: path
+            required: true
+            schema:
+              type: string
+
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseCustomerRequest'
+
+        responses:
+          '200':
+            description: Cliente actualizado exitosamente
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ResponseCustomerApi'
+
+    /customers/document/{documentNumber}:
+      get:
+        tags:
+          - Customers
+        summary: Buscar cliente por DNI o RUC
+        operationId: findByDocument
+        parameters:
+          - name: documentNumber
+            in: path
+            required: true
+            schema:
+              type: string
+
+        responses:
+          '200':
+            description: Cliente encontrado
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/CustomerResponse'
+
+  components:
+
+    schemas:
+      BaseCustomerRequest:
+        type: object
+        required:
+          - customerType
+          - profile
+          - documentType
+          - documentNumber
+          - status
+
+        discriminator:
+          propertyName: customerType
+          mapping:
+            PERSONAL: '#/components/schemas/PersonalCustomerRequest'
+            BUSINESS: '#/components/schemas/BusinessCustomerRequest'
+
+        properties:
+          customerType:
+            $ref: '#/components/schemas/CustomerType'
+
+          profile:
+            $ref: '#/components/schemas/CustomerProfile'
+
+          documentType:
+            $ref: '#/components/schemas/DocumentType'
+
+          documentNumber:
+            type: string
+
+          email:
+            type: string
+
+          phone:
+            type: string
+
+          address:
+            type: string
+
+          status:
+            $ref: '#/components/schemas/CustomerStatus'
+
+          createdAt:
+            type: string
+            format: date
+
+          updateAt:
+            type: string
+            format: date
+
+      PersonalCustomerRequest:
+        allOf:
+          - $ref: '#/components/schemas/BaseCustomerRequest'
+          - type: object
+            required:
+              - names
+              - lastName
+
+            properties:
+              names:
+                type: string
+
+              lastName:
+                type: string
+
+              birthDate:
+                type: string
+                format: date
+
+      BusinessCustomerRequest:
+        allOf:
+          - $ref: '#/components/schemas/BaseCustomerRequest'
+          - type: object
+            required:
+              - businessName
+
+            properties:
+              businessName:
+                type: string
+
+              contactName:
+                type: string
+
+      CustomerResponse:
+        type: object
+
+        discriminator:
+          propertyName: customerType
+          mapping:
+            PERSONAL: '#/components/schemas/PersonalCustomerResponse'
+            BUSINESS: '#/components/schemas/BusinessCustomerResponse'
+
+        required:
+          - customerId
+          - customerType
+          - profile
+          - documentType
+          - documentNumber
+          - status
+
+        properties:
+          customerId:
+            type: string
+
+          customerType:
+            $ref: '#/components/schemas/CustomerType'
+
+          profile:
+            $ref: '#/components/schemas/CustomerProfile'
+
+          documentType:
+            $ref: '#/components/schemas/DocumentType'
+
+          documentNumber:
+            type: string
+
+          email:
+            type: string
+
+          phone:
+            type: string
+
+          address:
+            type: string
+
+          status:
+            $ref: '#/components/schemas/CustomerStatus'
+
+          createdAt:
+            type: string
+            format: date
+
+          updatedAt:
+            type: string
+            format: date
+
+      PersonalCustomerResponse:
+        allOf:
+          - $ref: '#/components/schemas/CustomerResponse'
+          - type: object
+            properties:
+              names:
+                type: string
+
+              lastName:
+                type: string
+
+              birthDate:
+                type: string
+                format: date
+
+      BusinessCustomerResponse:
+        allOf:
+          - $ref: '#/components/schemas/CustomerResponse'
+          - type: object
+            properties:
+              businessName:
+                type: string
+
+              contactName:
+                type: string
+
+      PagedCustomerResponse:
+        type: object
+        properties:
+          content:
+            type: array
+            items:
+              $ref: '#/components/schemas/CustomerResponse'
+
+          page:
+            type: integer
+
+          size:
+            type: integer
+
+          totalElements:
+            type: integer
+
+          totalPages:
+            type: integer
+
+      CustomerType:
+        type: string
+        enum:
+          - PERSONAL
+          - BUSINESS
+
+      CustomerProfile:
+        type: string
+        enum:
+          - STANDARD
+          - VIP
+          - PYME
+
+      CustomerStatus:
+        type: string
+        enum:
+          - ACTIVE
+          - INACTIVE
+
+      DocumentType:
+        type: string
+        enum:
+          - DNI
+          - RUC
+          - PASSPORT
+
+      ResponseCustomerApi:
+        type: object
+        properties:
+          code:
+            type: string
+            example: "00"
+
+          message:
+            type: string
+            example: Cliente XXXX registrado/actualizado
