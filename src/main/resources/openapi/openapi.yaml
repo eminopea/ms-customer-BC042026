@@ -6,6 +6,9 @@
     version: 1.0.0
     description: Microservicio de clientes bancarios
 
+  servers:
+    - url: http://localhost:8080
+
   tags:
     - name: Customers
 
@@ -328,7 +331,6 @@
         enum:
           - DNI
           - RUC
-          - PASSPORT
 
       ResponseCustomerApi:
         type: object

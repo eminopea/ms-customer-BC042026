@@ -1,4 +1,4 @@
-package com.template.ms_customer.infrastructure.adapters.output.mongo.mapper;
+package com.template.ms_customer.infrastructure.adapters.output.mapper;
 
 
 import com.template.ms_customer.domain.model.Customer;

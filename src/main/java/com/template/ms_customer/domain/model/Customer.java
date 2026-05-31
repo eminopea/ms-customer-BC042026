@@ -15,9 +15,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class Customer {
-    @Id
     private String id;
-
     private CustomerType customerType;
     private CustomerProfile profile;
     private DocumentType documentType;

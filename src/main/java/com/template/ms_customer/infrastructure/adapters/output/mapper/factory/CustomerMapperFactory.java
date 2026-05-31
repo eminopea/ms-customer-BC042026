@@ -1,7 +1,6 @@
-package com.template.ms_customer.infrastructure.adapters.output.mongo.mapper;
+package com.template.ms_customer.infrastructure.adapters.output.mapper.factory;
 
-import com.template.ms_customer.domain.model.Customer;
-import lombok.Getter;
+import com.template.ms_customer.infrastructure.adapters.output.mapper.CustomerMapper;
 import org.openapitools.model.CustomerType;
 import org.springframework.stereotype.Component;
 

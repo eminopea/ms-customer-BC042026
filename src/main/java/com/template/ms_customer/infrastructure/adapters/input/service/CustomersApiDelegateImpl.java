@@ -6,14 +6,12 @@ import com.template.ms_customer.application.usecase.SearchCustomerByFiltersUseCa
 import com.template.ms_customer.application.usecase.UpdateCustomerUseCase;
 import com.template.ms_customer.domain.model.Customer;
 import com.template.ms_customer.infrastructure.adapters.input.shared.MessageResponse;
-import com.template.ms_customer.infrastructure.adapters.output.mongo.mapper.CustomerMapper;
-import com.template.ms_customer.infrastructure.adapters.output.mongo.mapper.CustomerMapperFactory;
+import com.template.ms_customer.infrastructure.adapters.output.mapper.CustomerMapper;
+import com.template.ms_customer.infrastructure.adapters.output.mapper.factory.CustomerMapperFactory;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.api.CustomersApi;
 import org.openapitools.model.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;

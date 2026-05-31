@@ -1,8 +1,7 @@
-package com.template.ms_customer.infrastructure.adapters.output.mongo.mapper;
+package com.template.ms_customer.infrastructure.adapters.output.mapper;
 
 import com.template.ms_customer.domain.model.BusinessCustomer;
 import com.template.ms_customer.domain.model.Customer;
-import com.template.ms_customer.domain.model.PersonalCustomer;
 import com.template.ms_customer.infrastructure.adapters.output.mongo.document.BusinessCustomerDocument;
 import com.template.ms_customer.infrastructure.adapters.output.mongo.document.CustomerDocument;
 import org.openapitools.model.*;
